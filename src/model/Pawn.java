@@ -1,6 +1,7 @@
 package model;
 
-import controller.Chessboard;
+import utils.ColorG;
+import utils.Symbol;
 
 /**
  * Class to manage the Pawn piece

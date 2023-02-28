@@ -1,6 +1,10 @@
-package controller;
+package main;
 
 import model.*;
+import utils.ChessMoveException;
+import utils.ColorG;
+import utils.Notation;
+import utils.Symbol;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -351,6 +355,7 @@ public class GameEngine {
 				if (inputChoice.equals("1")) {
 					this.displayMoves();
 				} else if (inputChoice.equals("2")) {
+					this.endMsg = this.currentPlayer.getName() + " forfeited";
 					this.switchPlayer();
 					this.state = 1;
 					break;

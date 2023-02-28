@@ -1,4 +1,4 @@
-package model;
+package utils;
 
 /**
  * Exception when a player is doing a wrong move

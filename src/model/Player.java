@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import utils.ColorG;
+
 /**
  * Class to manage the players
  * @author Hitsuji

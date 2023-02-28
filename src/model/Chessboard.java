@@ -1,6 +1,6 @@
-package controller;
+package model;
 
-import model.*;
+import utils.ColorG;
 
 /**
  * Class to manage the board of the game

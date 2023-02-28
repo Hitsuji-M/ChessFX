@@ -1,4 +1,7 @@
-package model;
+package utils;
+
+import model.Piece;
+import model.Position;
 
 /**
  * A class to create algebraic notation of the moves in chess

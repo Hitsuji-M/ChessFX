@@ -1,6 +1,7 @@
 package model;
 
-import controller.Chessboard;
+import utils.ColorG;
+import utils.Symbol;
 
 public class Bishop extends Piece
 {
