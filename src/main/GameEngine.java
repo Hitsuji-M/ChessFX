@@ -201,6 +201,7 @@ public class GameEngine {
 						}
 
 						if (res) {
+							
 							return false;
 						}
 					}
@@ -314,6 +315,7 @@ public class GameEngine {
 
 			if (this.isCheckmate(enemy, currentP)) {
 				this.state = 1;
+				this.ui.setEndMsg(this.currentPlayer + " put the opposing king in checkmate");
 				return;
 			} else {
 				this.switchPlayer();
