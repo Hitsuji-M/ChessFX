@@ -39,7 +39,7 @@ public class Notation
 	
 	/**
 	 * Format for a check
-	 * @param enPassant if the piece checks the king
+	 * @param check Boolean to look if the piece checks the king
 	 * @return The string format of the check
 	 */
 	private static String checkStr(final boolean check)

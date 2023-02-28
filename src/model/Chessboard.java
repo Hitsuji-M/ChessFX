@@ -8,12 +8,17 @@ import utils.ColorG;
  */
 public class Chessboard
 {
+	/** Two dimensional arrray to represents the board and store the pieces*/
 	private Piece[][] pieces;
+	/** Which pawn did a 2 sqaures hop in last */
 	private Piece lastPawnHop; 
+	/** White and Black players in the game */
 	private Player whitePlayer, blackPlayer;
 	
 	/**
 	 * Constructor of the class
+	 * @param white The white player
+	 * @param black The black player
 	 */
 	public Chessboard(final Player white, final Player black)
 	{
@@ -25,7 +30,9 @@ public class Chessboard
 	}
 	
 	/**
-	 * Set all the pieces on the board
+	 * Set all pieces on the board
+	 * @param white The white player
+	 * @param black The black player
 	 */
 	private void setPieces(final Player white, final Player black)
 	{

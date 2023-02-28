@@ -1,7 +1,13 @@
 package utils;
 
+/**
+ * A class to creates a symbol for each piece
+ * @author Jean-Michel Nourrit
+ * @author Eric Desjardins
+ */
 public class Symbol
 {
+	/** Constructor */
 	private Symbol() {}
 	
 	/** Symbol of white king (code UTF-16 : 0x2654) */

@@ -5,29 +5,54 @@ import utils.ChessMoveException;
 
 import java.util.Scanner;
 
+/**
+ * Class to manage the UserInterface such as user inputs, outputs, ...
+ * @author erwann
+ *
+ */
 public class UserInterface
 {
+	/** The GameEngine to run the project*/
 	private GameEngine ge;
+	/** The scanner for all user inputs */
 	private Scanner scanner;
+	/** Final message to show at the end of the game */
 	private String endMsg;
 	
+	/**
+	 * Constructor of the class
+	 * @param ge The GameEngine of the project that will be linked to the UI
+	 */
 	public UserInterface(final GameEngine ge)
 	{
 		this.ge = ge;
 		this.scanner = new Scanner(System.in);
 	}
 	
+	/**
+	 * Change the end message
+	 * @param newMsg The new endmessage to show
+	 */
 	public void setEndMsg(final String newMsg)
 	{
 		this.endMsg = newMsg;
 	}
 
+	/**
+	 * Ask the player for a draw
+	 * @return Player's input
+	 */
 	public String askDraw()
 	{
 		System.out.println("\n" + this.ge.getCurrentPlayer() + " asked for a draw do you accept ? Y/N");
 		return this.scanner.next();
 	}
 	
+	/**
+	 * Ask the player for the promotion
+	 * @param pos The position of the promoted pawn
+	 * @return Player's input
+	 */
 	public String askPromotion(final Position pos)
 	{
 		System.out.println("\n---------------------------");
@@ -38,6 +63,9 @@ public class UserInterface
 		return this.scanner.next();
 	}
 	
+	/**
+	 * Function to launch the game
+	 */
 	public void launch()
 	{
 		System.out.println("Enter the name of the white and the black player");
@@ -46,6 +74,9 @@ public class UserInterface
 		this.loop();
 	}
 	
+	/**
+	 * Main loop
+	 */
 	private void loop()
 	{
 		String inputChoice;

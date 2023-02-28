@@ -10,18 +10,26 @@ import utils.ColorG;
  */
 public class Player
 {
+	/** Name of the player */
 	private String name;
+	/** Color of the player */
 	private ColorG color;
+	/** Current position of the player's King */
 	private Position kingPos;
+	/** Is the player able to do a little castle */
 	private boolean canDoLittleCastling;
+	/** Is the player able to do a big castle */
 	private boolean canDoBigCastling;
+	/** Array for all the pieces of the player */
 	private ArrayList<Piece> pieces;
+	/** Points earned by the player */
 	private int points;
 	
 	/**
 	 * Constructor of the class
 	 * @param name Name of the player
 	 * @param color Color of the player
+	 * @param kingPos Position of the player's King
 	 */
 	public Player(final String name, final ColorG color, final Position kingPos)
 	{

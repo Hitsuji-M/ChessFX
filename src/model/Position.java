@@ -8,7 +8,9 @@ import java.util.regex.Pattern;
  */
 public class Position
 {
+	/** X position (represented byt the letter) */
 	private int x;
+	/** Y position (represented by the digit) */
 	private int y;
 	
 	/**

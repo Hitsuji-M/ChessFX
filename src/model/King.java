@@ -9,12 +9,25 @@ import utils.Symbol;
  */
 public class King extends Piece
 {
+	/** Boolean to look if the king already moved */
 	private boolean hasMoved;
+	/** Boolean to look if the king did a castle */
 	private boolean hasDoneCastle;
+	/** Boolean to look if the king did little/big castle */
 	private boolean doLittleCastle, doBigCastle;
+	/** Boolean to look if the little/big castle are disabled */
 	private boolean disableLittleC, disableBigC;
+	/** The piece involved in the castle*/
 	private Piece castlePiece;
 	
+	/**
+	 * Constructor of the class
+	 * @param board The chessboard that contains the piece
+	 * @param pos The position of the piece
+	 * @param color The color of the piece
+	 * @param player The player who the piece belongs to
+	 * @param value The value given if the piece is eaten
+	 */
 	public King(Chessboard board, Position pos, final ColorG color, final Player player, final int value) {
 		super(board,
 			  pos,
@@ -52,7 +65,6 @@ public class King extends Piece
 	
 	/**
 	 * Reset the castle movement attributes of the king
-	 * @return true or false
 	 */
 	public void resetCastle()
 	{

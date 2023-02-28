@@ -63,6 +63,10 @@ public class GameEngine {
 		this.ui = ui;
 	}
 	
+	/**
+	 * Create a string containing all the informations for the current turn
+	 * @return String of the turn
+	 */
 	public String turnInfo()
 	{
 		return this.board + "\n\n"
@@ -71,6 +75,10 @@ public class GameEngine {
 				+ "- Total points ==> " + this.currentPlayer.getPoints() + "\n";
 	}
 	
+	/**
+	 * Create a string containing all the informations for the final message
+	 * @return Final message string
+	 */
 	public String endInfo()
 	{
 		String res = this.board + "\n";
@@ -110,7 +118,14 @@ public class GameEngine {
 
 
 	/**
-	 * Add a move to the list of game's moves
+	 * Add a move to the moves list
+	 * @param piece The moving piece
+	 * @param capture Boolean to check if a capture occured
+	 * @param check Boolean to check if move put the king in check
+	 * @param promotion Boolean to check if a promotion occured
+	 * @param castleType The castle type (0 : None, 1 : little, else : big)
+	 * @param enPassant Boolean to check if a 'enPassant' occured
+	 * @param oldX Old X position of the moving piece
 	 */
 	private void addMove(final Piece piece, final boolean capture,
 					     final boolean check, final boolean promotion,
@@ -136,7 +151,8 @@ public class GameEngine {
 	}
 
 	/**
-	 * Display all the moves used in the game
+	 * Create a string containing all the moves
+	 * @return The string to display
 	 */
 	public String displayMoves() {
 		StringBuilder res = new StringBuilder("");

@@ -10,10 +10,21 @@ import utils.Symbol;
  */
 public class Pawn extends Piece
 {
+	/** Boolean to know if the pawn already moved */
 	private boolean hasMoved;
+	/** Boolean to know if the pawn did a 'enPassant' */
 	private boolean enPassant;
+	/** Enemy piece involved in the 'enPassant' */
 	private Piece piecePassant;
 	
+	/**
+	 * Constructor of the class
+	 * @param board The chessboard that contains the piece
+	 * @param pos The position of the piece
+	 * @param color The color of the piece
+	 * @param player The player who the piece belongs to
+	 * @param value The value given if the piece is eaten
+	 */
 	public Pawn(Chessboard board, Position pos, final ColorG color, Player player, final int value) {
 		super(board,
 			  pos,

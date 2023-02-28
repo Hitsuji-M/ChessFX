@@ -9,20 +9,30 @@ import utils.Symbol;
  */
 public abstract class Piece
 {
+	/** Position of the piece */
 	private Position position;
+	/** Color of the piece */
 	private ColorG color;
+	/** Name of the piece */
 	private String name;
+	/** Symbol of the piece (see Symbol.java) */
 	private char symbol;
+	/** Player who the piece belongs to */
 	private Player player;
+	/** The board containing the piece*/
 	protected Chessboard board;
+	/** The value of the piece */
 	private int value;
 	
 	/**
 	 * Constructor for the Class
 	 * @param board The board of the game
 	 * @param pos The position of the piece on the board
-	 * @param color The color of the piece (BLACK or WHITE)
-	 * @param name The name of the piece
+	 * @param name The color of the piece (BLACK or WHITE)
+	 * @param color The name of the piece
+	 * @param symbol The symbol of the piece
+	 * @param player Player who the piece belongs to
+	 * @param value The value of the piece
 	 */
 	public Piece(final Chessboard board, final Position pos, final String name, final ColorG color, final char symbol, final Player player, final int value)
 	{
@@ -175,6 +185,8 @@ public abstract class Piece
 	
 	/**
 	 * Move the piece
+	 * @param pos The position where the piece goes to
+	 * @return The old piece if eaten (else null)
 	 */
 	public Piece moveTo(final Position pos)
 	{
@@ -199,6 +211,10 @@ public abstract class Piece
 		posPiece.setY(pos.getY());
 	}
 	
+	/**
+	 * Set the player for the game
+	 * @param player The new player to set
+	 */
 	public void setPlayer(final Player player)
 	{
 		if (player == null || player.getColor() != this.getColor()) {
