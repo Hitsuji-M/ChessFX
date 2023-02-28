@@ -199,6 +199,14 @@ public abstract class Piece
 		posPiece.setY(pos.getY());
 	}
 	
+	public void setPlayer(final Player player)
+	{
+		if (player == null || player.getColor() != this.getColor()) {
+			throw new IllegalArgumentException("No");
+		}
+		this.player = player;
+	}
+	
 	@Override
 	public String toString()
 	{

@@ -1,13 +1,9 @@
 package main;
 
 import model.*;
-import utils.ChessMoveException;
-import utils.ColorG;
-import utils.Notation;
-import utils.Symbol;
+import utils.*;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * The class to manage the game and how it's working
@@ -15,6 +11,8 @@ import java.util.Scanner;
  * @author Hitsuji
  */
 public class GameEngine {
+	/** UI of the game */
+	private UserInterface ui;
 	/** The board of the game */
 	private Chessboard board;
 	/** White and Black player of the current game */
@@ -27,57 +25,89 @@ public class GameEngine {
 	private int state;
 	/** Number of turns where nothing happened */
 	private int countNullTurn;
-	/** The message to display at the end */
-	private String endMsg;
-
-	private Scanner scanner;
 
 	/**
 	 * Constructor of the class
 	 */
 	public GameEngine() {
-		this.scanner = new Scanner(System.in);
-		this.enterNames();
-
 		this.board = new Chessboard(this.whitePlayer, this.blackPlayer);
 		this.moves = new ArrayList<String[]>();
 		this.state = 0;
 		this.countNullTurn = 0;
-
-		this.addUserPiece();
-		this.startGame();
 	}
-
+	
 	/**
-	 * Register all the piece of each player
+	 * Get the current state of the game
+	 * @return The state of the game
 	 */
-	private void addUserPiece() {
-		Piece piece;
-		for (int x = 0; x < 8; x++) {
-			for (int y = 0; y < 8; y++) {
-				piece = board.getPiece(x, y);
-				if (piece == null) {
-					continue;
-				}
-
-				if (piece.getColor() == ColorG.WHITE) {
-					this.whitePlayer.addPiece(piece);
-				} else {
-					this.blackPlayer.addPiece(piece);
-				}
-			}
+	public int getState()
+	{
+		return this.state;
+	}
+	
+	/**
+	 * Gives the current player of the turn
+	 * @return Player
+	 */
+	public Player getCurrentPlayer()
+	{
+		return this.currentPlayer;
+	}
+	
+	/**
+	 * Set the UserInterface of the game
+	 * @param ui The UserInterface object
+	 */
+	public void setUI(final UserInterface ui)
+	{
+		this.ui = ui;
+	}
+	
+	public String turnInfo()
+	{
+		return this.board + "\n\n"
+				+ this.currentPlayer.getName() + "'s turn\n"
+				+ "- Color ==> " + this.currentPlayer.getColor() + "\n"
+				+ "- Total points ==> " + this.currentPlayer.getPoints() + "\n";
+	}
+	
+	public String endInfo()
+	{
+		String res = this.board + "\n";
+		
+		if (this.state == 1) {
+			res += this.currentPlayer + " has won\n";
+		} else {
+			res += "The game ended null, no one won\n";
 		}
+		return res;
+	}
+	
+	/**
+	 * Add players to the game
+	 * @param whiteP Name of the white player
+	 * @param blackP Name of the black player
+	 */
+	public void addPlayers(final String whiteP, final String blackP)
+	{
+		this.whitePlayer = new Player(whiteP, ColorG.WHITE, new Position(4, 0));
+		this.blackPlayer = new Player(blackP, ColorG.BLACK, new Position(4, 7));
+		this.currentPlayer = this.whitePlayer;
+		this.board.updatePlayers(this.whitePlayer, this.blackPlayer);
+	}
+	
+	/**
+	 * Change the state of the game and prepare for a forfeit
+	 * @return The end message
+	 */
+	public String forfeit()
+	{
+		String res = this.currentPlayer.getName() + " forfeited";
+		this.switchPlayer();
+		this.state = 1;
+		return res;
 	}
 
-	/**
-	 * Get the names and create the players
-	 */
-	private void enterNames() {
-		System.out.println("Enter the name of the white and the black player");
-		this.whitePlayer = new Player(this.scanner.next(), ColorG.WHITE, new Position(4, 0));
-		this.blackPlayer = new Player(this.scanner.next(), ColorG.BLACK, new Position(4, 7));
-		this.currentPlayer = this.whitePlayer;
-	}
 
 	/**
 	 * Add a move to the list of game's moves
@@ -108,14 +138,13 @@ public class GameEngine {
 	/**
 	 * Display all the moves used in the game
 	 */
-	private void displayMoves() {
+	public String displayMoves() {
 		StringBuilder res = new StringBuilder("");
 		for (int i = 0; i < this.moves.size(); i++) {
 			String[] couple = this.moves.get(i);
 			res.append("" + (i + 1) + " : " + couple[0] + "\t" + couple[1] + "\n");
 		}
-		System.out.println(res);
-		System.out.println("\n");
+		return res + "\n";
 	}
 
 	/**
@@ -134,9 +163,8 @@ public class GameEngine {
 	 * 
 	 * @return true if the player agreed, else false
 	 */
-	private boolean askForDraw() {
-		System.out.println("\n" + this.currentPlayer.getName() + " asked for a draw do you accept ? Y/N");
-		String answer = this.scanner.next().toLowerCase();
+	public boolean askForDraw() {
+		String answer = this.ui.askDraw().toLowerCase();
 		if (answer.equals("y") || answer.equals("yes")) {
 			this.state = 2;
 			return true;
@@ -196,13 +224,7 @@ public class GameEngine {
 		ColorG color = oldPawn.getColor();
 
 		while (true) {
-			System.out.println("\n---------------------------");
-			System.out.println("You can promote your pawn at " + pos + "\nWhich piece will it change to ? :\n"
-					+ "N : Knight \nB : Bishop \nR : Rook \nQ : Queen");
-			System.out.println("\n---------------------------");
-			System.out.print("\nEnter your answer : ");
-
-			inputUser = this.scanner.next().toUpperCase();
+			inputUser = this.ui.askPromotion(pos).toUpperCase();
 			if (inputUser.length() > 1) {
 				continue;
 			}
@@ -229,7 +251,7 @@ public class GameEngine {
 	 * @throws ChessMoveException Error launched if the player asked for an
 	 *                            impossible move
 	 */
-	private void turn(final Position start, final Position end) throws ChessMoveException {
+	public void turn(final Position start, final Position end) throws ChessMoveException {
 		// All the useful data
 		Piece pieceStart = this.board.getPiece(start);
 		Piece oldPiece;
@@ -247,7 +269,7 @@ public class GameEngine {
 			throw new ChessMoveException("This move is impossible, choose one of your piece", start.toString(),
 					end.toString());
 		}
-
+		
 		// Move the piece if it's possible
 		if (pieceStart.canMoveTo(end)) {
 			symbolP = pieceStart.getSymbol();
@@ -305,7 +327,7 @@ public class GameEngine {
 		if (!check) {
 			if (this.isCheckmate(enemy, currentP)) { // The stalemate works like a checkmate but the king is not in check
 				this.state = 2;
-				this.endMsg = "The game is in a situation of stalemate, it's considered as null";
+				this.ui.setEndMsg("The game is in a situation of stalemate, it's considered as null");
 				return;
 			}
 		}
@@ -317,88 +339,11 @@ public class GameEngine {
 			this.countNullTurn++;
 			if (this.countNullTurn >= 50) {
 				this.state = 2;
-				this.endMsg = "No pieces have been captured and no pawns have been moved during the last 50 turns,"
-							+ "this game is declared as null !";
+				this.ui.setEndMsg("No pieces have been captured and no pawns have been moved during the last 50 turns,"
+							+ "this game is declared as null !");
 			}
 		} else {
 			this.countNullTurn = 0;
 		}
-	}
-
-	/**
-	 * Launch the game
-	 */
-	private void startGame() {
-		String inputChoice;
-		Position start;
-		Position end;
-		boolean play;
-
-		// Main game loop
-		while (this.state == 0) {
-			System.out.println(this.board);
-			System.out.println("\n" + this.currentPlayer.getName() + "'s turn\n" + "- Color ==> "
-					+ this.currentPlayer.getColor().toString() + "\n" + "- Total points ==> "
-					+ this.currentPlayer.getPoints() + "\n");
-
-			// The player choose what he wants to do
-			// If it's a wrong choice or just to display continue to loop
-			play = false;
-			while (!play) {
-				System.out.println("------------------------------------------");
-				System.out
-						.println("What do you want to do (enter an answer) ? \n" + "1 : Check all the previous moves \n"
-								+ "2 : Forfeit \n" + "3 : Ask for a draw \n" + "4 (or others) : Play");
-				System.out.println("------------------------------------------\n");
-
-				inputChoice = this.scanner.next();
-				if (inputChoice.equals("1")) {
-					this.displayMoves();
-				} else if (inputChoice.equals("2")) {
-					this.endMsg = this.currentPlayer.getName() + " forfeited";
-					this.switchPlayer();
-					this.state = 1;
-					break;
-				} else if (inputChoice.equals("3")) {
-					if (this.askForDraw()) {
-						break;
-					}
-				} else {
-					play = true;
-				}
-			}
-			if (this.state != 0) {
-				continue;
-			}
-
-			// Ask the player to move a piece
-			System.out.println("\n==> Enter which piece you choose and then where it goes");
-			try {
-				start = new Position(this.scanner.next());
-				end = new Position(this.scanner.next());
-			} catch (final IllegalArgumentException error) {
-				System.out.println(error.getMessage());
-				continue;
-			}
-
-			// Launch the turn
-			try {
-				this.turn(start, end);
-			} catch (final ChessMoveException error) {
-				System.out.println(error.getMessage());
-			}
-		}
-
-		// Check who won the game
-		System.out.println(this.board);
-		System.out.println(this.endMsg);
-		
-		if (this.state == 1) {
-			System.out.println(this.currentPlayer.getName() + " has won");
-		} else {
-			System.out.println("The game ended null, no one won");
-		}
-		this.scanner.close();
-		System.exit(0);
 	}
 }

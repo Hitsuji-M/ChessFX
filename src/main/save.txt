@@ -1,0 +1,76 @@
+	/**
+	 * Launch the game
+	 */
+	private void startGame() {
+		String inputChoice;
+		Position start;
+		Position end;
+		boolean play;
+
+		// Main game loop
+		while (this.state == 0) {
+			System.out.println(this.board);
+			System.out.println("\n" + this.currentPlayer.getName() + "'s turn\n" + "- Color ==> "
+					+ this.currentPlayer.getColor().toString() + "\n" + "- Total points ==> "
+					+ this.currentPlayer.getPoints() + "\n");
+
+			// The player choose what he wants to do
+			// If it's a wrong choice or just to display continue to loop
+			play = false;
+			while (!play) {
+				System.out.println("------------------------------------------");
+				System.out
+						.println("What do you want to do (enter an answer) ? \n" + "1 : Check all the previous moves \n"
+								+ "2 : Forfeit \n" + "3 : Ask for a draw \n" + "4 (or others) : Play");
+				System.out.println("------------------------------------------\n");
+
+				inputChoice = this.scanner.next();
+				if (inputChoice.equals("1")) {
+					this.displayMoves();
+				} else if (inputChoice.equals("2")) {
+					this.endMsg = this.currentPlayer.getName() + " forfeited";
+					this.switchPlayer();
+					this.state = 1;
+					break;
+				} else if (inputChoice.equals("3")) {
+					if (this.askForDraw()) {
+						break;
+					}
+				} else {
+					play = true;
+				}
+			}
+			if (this.state != 0) {
+				continue;
+			}
+
+			// Ask the player to move a piece
+			System.out.println("\n==> Enter which piece you choose and then where it goes");
+			try {
+				start = new Position(this.scanner.next());
+				end = new Position(this.scanner.next());
+			} catch (final IllegalArgumentException error) {
+				System.out.println(error.getMessage());
+				continue;
+			}
+
+			// Launch the turn
+			try {
+				this.turn(start, end);
+			} catch (final ChessMoveException error) {
+				System.out.println(error.getMessage());
+			}
+		}
+
+		// Check who won the game
+		System.out.println(this.board);
+		System.out.println(this.endMsg);
+		
+		if (this.state == 1) {
+			System.out.println(this.currentPlayer.getName() + " has won");
+		} else {
+			System.out.println("The game ended null, no one won");
+		}
+		this.scanner.close();
+		System.exit(0);
+	}

@@ -144,4 +144,10 @@ public class Player
 	{
 		this.points += nbPoints;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.name;
+	}
 }

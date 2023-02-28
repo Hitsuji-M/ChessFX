@@ -132,6 +132,35 @@ public class Chessboard
 	}
 	
 	/**
+	 * Register all the piece of each player
+	 * @param white The white player
+	 * @param black The black player
+	 */
+	public void updatePlayers(final Player white, final Player black)
+	{
+		this.whitePlayer = white;
+		this.blackPlayer = black;
+		
+		Piece piece;
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				piece = this.pieces[x][y];
+				if (piece == null) {
+					continue;
+				}
+				
+				if (piece.getColor() == ColorG.WHITE) {
+					piece.setPlayer(this.whitePlayer);
+					this.whitePlayer.addPiece(piece);
+				} else {
+					piece.setPlayer(this.blackPlayer);
+					this.blackPlayer.addPiece(piece);
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Check if there's a piece between the start and the end 
 	 * @param start The starting position
 	 * @param end The ending position
