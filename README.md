@@ -26,5 +26,5 @@ Original authors are
 - Eric Desjardin
 - Jean-Michel Nourrit 
 
-for the base structure of the project (Some part of the class structure and inheritance, `Position.java` structure and `Notation.java` code)
+for the base structure of the project (Some part of the class structure and inheritance, `Position.java` structure and `Symbol.java` code)
 
